@@ -46,23 +46,6 @@
 #    # List of IPs or hostnames for which the IP/name binding is expected to change
 #    #dynamicaddresses => { "dhcp_.*" };
 #}
-body server control 
-{
- denybadclocks         => "false";
- allowconnects         => { "127.0.0.1" , "::1", @(def.acl) };
- allowallconnects      => { "127.0.0.1" , "::1", @(def.acl) };
- trustkeysfrom         => { "127.0.0.1" , "::1", @(def.acl) };
-
- skipverify            => { ".*$(def.domain)", "127.0.0.1" , "::1", @(def.acl) };
-
- allowusers            => { "root" };
-
-# Uncomment the line below to allow remote users to run 
-# cf-agent through cf-runagent
-
-# cfruncommand          => "$(sys.cf_agent)";
-}
-
 
 #bundle server access_rules() {
 #    access:
@@ -74,34 +57,3 @@ body server control
 #
 #    roles:
 #}
-
-###############################################################################
-# This part is for cf-serverd
-#
-# Server controls are mainly about determining access policy for the connection 
-# protocol: i.e. access to the server itself. 
-# Access to specific files must be granted in addition. 
-###############################################################################
-
-###############################################################################
-
-bundle server access_rules()
-{
- access:
-
-  any::
-
-   "$(def.dir_masterfiles)"
-       handle => "server_access_grant_access_policy",
-      comment => "Grant access to the policy updates",
-      admit   => { @(def.acl) };
-}
-
-bundle agent main
-{
- reports:
-  cfengine_3::
-   "--> Z_____Z Server $(def.domain)"
-      comment => "Display message on screen/email",
-       handle => "main_reports_cfe_running";
-}
