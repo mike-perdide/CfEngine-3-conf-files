@@ -12,8 +12,7 @@ body common control
     cfhub::
         bundlesequence => { "main_hub" };
         inputs => {
-            "cfengine_stdlib.cf",
-            "agent_control.cf",
+            @(def.common_inputs),
             "main_hub.cf",
             "server.cf",
            };
@@ -21,8 +20,7 @@ body common control
     cfhost1::
         bundlesequence => { "main_host" };
         inputs => {
-            "cfengine_stdlib.cf",
-            "agent_control.cf",
+            @(def.common_inputs),
             "main_host.cf",
            };
 }
@@ -38,7 +36,11 @@ bundle common def
 {
  vars:
 
-    "domain"  string => "v4";
+    "common_inputs" slist => {  "cfengine_stdlib.cf",
+                                "agent_control.cf",
+                                "executor.cf",
+                            };
+    "domain"  string => "v6";
     "acl" slist => { "192.168.0.116", "192.168.0.117", "cfhub", "cfhost1"};
     "dir_masterfiles" string => translatepath("$(sys.workdir)/masterfiles");
 
@@ -68,28 +70,6 @@ bundle common def
 # times and output capture to $(sys.workdir)/outputs and relay via email.
 ###############################################################################
 
-body executor control
-{
- any::
-
-  splaytime  => "1";
-  mailto     => "cfengine@$(def.domain)";
-  mailfrom   => "cfengine@$(sys.host).$(def.domain)";
-  smtpserver => "localhost";
-
-# Default:
-#
-# schedule => { "Min00", "Min05", "Min10", "Min15", "Min20", 
-#               "Min25", "Min30", "Min35", "Min40", "Min45",
-#               "Min50", "Min55" };
-
-# The full path and command to the executable run by default (overriding builtin).
-# cf-twin needs its own safe environment because of the update mechanism
-
- linux::
-  exec_command => "$(sys.cf_twin) -f failsafe.cf && $(sys.cf_agent)";
-
-}
 
 ###############################################################################
 # This part is for cf-report
