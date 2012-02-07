@@ -1,0 +1,12 @@
+
+###############################################################################
+
+bundle agent main
+{
+ reports:
+  cfengine_3::
+   "--> Z_______Z agent $(def.domain)"
+      comment => "Display message on screen/email",
+       handle => "main_reports_cfe_running";
+}
+

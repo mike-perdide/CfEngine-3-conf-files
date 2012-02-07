@@ -1,0 +1,75 @@
+# cfagent.cf - agent control promises
+# Meant for cfengine-community >= 3.2.1
+
+## Settings describing the details of the fixed behavioural promises made by
+## cf-agent.
+#body agent control {
+#    # This should normally be set to an interval like 1-5 mins
+#    ifelapsed => "0";
+#
+#    # A list of user names allowed to execute cf-agent
+#    agentaccess => { "root", };
+#
+#    # Maximum number of background tasks that should be allowed concurrently
+#    max_children => "10";
+#
+#    # List of allowed timezones this machine must comply with
+#    timezone => { "CET", "UTC+0100", };
+#
+#    debian::
+#        environment => { "LANG=C"};
+#
+#    # Use this interface for outgoing connections
+#    #bindtointerface => "192.168.1.1";
+#    
+#    # List of environment variables to be inherited by children
+#    #environment => { "A=123", "B=456", "PGK_PATH=/tmp"};
+#
+#    # List of filenames to be watched for multiple-source conflicts
+#    #single_copy => { "/etc/.*", "/special/file" };
+#
+#    # Path to the default file repository
+#    #default_repository => "/var/cfengine/repository";
+#
+#    # Do not send IP/name during server connection if address resolution is
+#    # broken.
+#    skipidentify => "true";
+#
+#    # true/false switches on output to syslog at the inform level
+#    #syslog => "true";
+#}
+
+###############################################################################
+# This part is for cf-agent 
+#
+# Settings describing the details of the fixed behavioural promises made by 
+# cf-agent.
+###############################################################################
+
+body agent control
+
+{
+# Global default for time that must elapse before promise will be rechecked.
+# Don't keep any promises.
+
+ any::
+
+ # This should normally be set to an interval like 1-5 mins
+ # We set it to zero initially to avoid confusion.
+
+  ifelapsed => "0";
+
+ # Do not send IP/name during server connection if address resolution is broken.
+ # Comment it out if you do NOT have a problem with DNS
+
+  skipidentify => "true";
+
+ # Environment variables based on Distro
+
+ debian::
+  environment => { 
+                  "DEBIAN_FRONTEND=noninteractive",
+                 };
+
+}
+

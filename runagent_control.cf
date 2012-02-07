@@ -1,0 +1,45 @@
+# runagent.cf - runagent control promises
+
+# Settings describing the details of the fixed behavioural promises made by
+# cf-runagent. The most important parameter here is the list of hosts that the
+# agent will poll for connections. This is easily read in from a file list,
+# however when doing so always have a stable input source that does not depend
+# on the network (including a database or directory service) in any way:
+# introducing such dependencies makes configuration brittle.
+#body runagent control {
+#    any::
+#        # List of host or IP addresses to attempt connection with
+#        hosts => { "127.0.0.1" };
+#
+#    # Default port for cfengine server
+#    #port => "5308";
+#
+#    # true/false force use of ipv4 in connection
+#    #force_ipv4 => "true";
+#
+#    # rue/false automatically accept all keys on trust from servers
+#    #trustkey => "true";
+#
+#    # true/false whether to send collected output to file(s)
+#    #output_to_file => "true";
+#}
+
+###############################################################################
+# This part is for cf-runagent
+#
+# The most important parameter here is the list of hosts that the agent will 
+# poll for connections.
+###############################################################################
+
+body runagent control
+{
+# A list of hosts to contact when using cf-runagent
+
+ any::
+
+  hosts => { "127.0.0.1" };
+
+# , "myhost.example.com:5308", ...
+
+}
+

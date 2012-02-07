@@ -1,0 +1,9 @@
+# agent_main.cf - main bundle for agent
+
+bundle agent main {
+    reports:
+        cfengine_3::
+            "--> CFE is running on $(sys.fqhost)"
+                comment => "Display message on screen/email",
+                handle => "main_reports_cfe_running";
+}

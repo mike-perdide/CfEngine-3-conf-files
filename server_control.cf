@@ -1,0 +1,107 @@
+# server.cf - server control promises
+# Meant for cfengine-community >= 3.2.1
+
+## Settings describing the details of the fixed behavioural promises made by
+## cf-serverd. Server controls are mainly about determining access policy for
+## the connection protocol: i.e. access to the server itself. Access to specific
+## files must be granted in addition.
+#body server control {
+#    # List of IPs or hostnames that may have more than one connection to the
+#    # server port
+#    allowallconnects      => { @(def.acl) };
+#    #allowallconnects => { @(g.allowed_hosts) };
+#
+#    # List of IPs or hostnames that may connect to the server port
+#    allowconnects         => { @(def.acl) };
+#    #allowconnects => { @(g.allowed_hosts) };
+#
+#    # List of IPs from whom we accept public keys on trust
+#    trustkeysfrom         => { @(def.acl) };
+#    #trustkeysfrom => { @(g.allowed_hosts) };
+#
+#    # List of usernames who may execute requests from this server
+#    allowusers            => { "root" };
+#    #allowusers => { "cfengine", "root" };
+#
+#    # true/false activate auditing of server connections
+#    #auditing => "true";
+#
+#    # true/false accept connections from hosts with clocks that are out of sync
+#    #denybadclocks         => "false";
+#    denybadclocks => "false";
+#
+#    # List of IPs or hostnames for which we expect no DNS binding and cannot verify
+#    skipverify            => { @(def.acl) };
+#    #skipverify => { @(g.allowed_hosts) };
+#
+#    # IP of the interface to which the server should bind on multi-homed hosts
+#    #bindtointerface => "192.168.1.1";
+#
+#    # Default port for cfengine server
+#    #port => "5308"
+#
+#    # List of IPs or hostnames that may NOT connect to the server port
+#    #denyconnects => {};
+#
+#    # List of IPs or hostnames for which the IP/name binding is expected to change
+#    #dynamicaddresses => { "dhcp_.*" };
+#}
+body server control 
+{
+ denybadclocks         => "false";
+ allowconnects         => { "127.0.0.1" , "::1", @(def.acl) };
+ allowallconnects      => { "127.0.0.1" , "::1", @(def.acl) };
+ trustkeysfrom         => { "127.0.0.1" , "::1", @(def.acl) };
+
+ skipverify            => { ".*$(def.domain)", "127.0.0.1" , "::1", @(def.acl) };
+
+ allowusers            => { "root" };
+
+# Uncomment the line below to allow remote users to run 
+# cf-agent through cf-runagent
+
+# cfruncommand          => "$(sys.cf_agent)";
+}
+
+
+#bundle server access_rules() {
+#    access:
+#        any::
+#            "$(g.dir_masterfiles)"
+#                handle => "server_access_grant_access_policy",
+#                comment => "Grant access to the policy updates",
+#                admit   => { @(g.acl) };
+#
+#    roles:
+#}
+
+###############################################################################
+# This part is for cf-serverd
+#
+# Server controls are mainly about determining access policy for the connection 
+# protocol: i.e. access to the server itself. 
+# Access to specific files must be granted in addition. 
+###############################################################################
+
+###############################################################################
+
+bundle server access_rules()
+{
+ access:
+
+  any::
+
+   "$(def.dir_masterfiles)"
+       handle => "server_access_grant_access_policy",
+      comment => "Grant access to the policy updates",
+      admit   => { @(def.acl) };
+}
+
+bundle agent main
+{
+ reports:
+  cfengine_3::
+   "--> Z_____Z Server $(def.domain)"
+      comment => "Display message on screen/email",
+       handle => "main_reports_cfe_running";
+}

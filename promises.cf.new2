@@ -1,0 +1,196 @@
+###############################################################################
+#
+#   promises.cf - Basic Policy for Community
+#
+###############################################################################
+
+body common control
+{
+ bundlesequence => { "main" };
+ version => "Community Promises.cf 1.0.0";
+
+    cfhost1::
+ inputs => { 
+            "cfengine_stdlib.cf", 
+            "server.cf",
+           };
+    cfhub::
+ inputs => { 
+            "cfengine_stdlib.cf", 
+            "server.cf",
+           };
+
+}
+
+###############################################################################
+
+bundle agent main
+{
+ reports:
+  cfengine_3::
+   "--> Zoooooooo"
+      comment => "Display message on screen/email",
+       handle => "main_reports_cfe_running";
+}
+
+###############################################################################
+#
+# common def
+#  - common/global variables and classes here  
+#
+###############################################################################
+
+bundle common def
+{
+ vars:
+
+  # Begin change # Your domain name, for use in access control
+
+     "domain"  string => "example.com",
+              comment => "Define a global domain for all hosts",
+               handle => "common_def_vars_domain";
+
+  # List here the IP masks that we grant access to on the server
+
+    "acl" slist => { 
+                   "$(sys.policy_hub)/16"  # Assume /16 LAN clients to start with
+
+                 #  "2001:700:700:3.*", 
+                 #  "217.77.34.18", 
+                 #  "217.77.34.19",
+                   },
+       comment => "Define an acl for the machines to be granted accesses",
+        handle => "common_def_vars_acl"; 
+
+  # End change #
+
+  "dir_masterfiles" string => translatepath("$(sys.workdir)/masterfiles"),
+                   comment => "Define masterfiles path",
+                    handle => "common_def_vars_dir_masterfiles";
+
+}
+
+###############################################################################
+# This part is for cf-agent 
+#
+# Settings describing the details of the fixed behavioural promises made by 
+# cf-agent.
+###############################################################################
+
+body agent control
+
+{
+# Global default for time that must elapse before promise will be rechecked.
+# Don't keep any promises.
+
+ any::
+
+ # This should normally be set to an interval like 1-5 mins
+ # We set it to zero initially to avoid confusion.
+
+  ifelapsed => "0";
+
+ # Do not send IP/name during server connection if address resolution is broken.
+ # Comment it out if you do NOT have a problem with DNS
+
+  skipidentify => "true";
+
+ # Environment variables based on Distro
+
+ debian::
+  environment => { 
+                  "DEBIAN_FRONTEND=noninteractive",
+                 };
+
+}
+
+###############################################################################
+# This part is for cf-execd
+#
+# These body settings determine the behaviour of cf-execd, including scheduling
+# times and output capture to $(sys.workdir)/outputs and relay via email.
+###############################################################################
+
+body executor control
+{
+ any::
+
+  splaytime  => "1";
+  mailto     => "cfengine@$(def.domain)";
+  mailfrom   => "cfengine@$(sys.host).$(def.domain)";
+  smtpserver => "localhost";
+
+# Default:
+#
+# schedule => { "Min00", "Min05", "Min10", "Min15", "Min20", 
+#               "Min25", "Min30", "Min35", "Min40", "Min45",
+#               "Min50", "Min55" };
+
+# The full path and command to the executable run by default (overriding builtin).
+# cf-twin needs its own safe environment because of the update mechanism
+
+ linux::
+  exec_command => "$(sys.cf_twin) -f failsafe.cf && $(sys.cf_agent)";
+
+}
+
+###############################################################################
+# This part is for cf-report
+#
+# Determines a list of reports to write into the build directory. 
+# The format may be in text, html or xml format.
+###############################################################################
+
+body reporter control
+{
+ any::
+
+  reports => { 
+             "all" 
+             };
+
+  build_directory => "$(sys.workdir)/reports";
+  report_output   => "html";
+  style_sheet => "/cf_enterprise.css";
+
+}
+
+###############################################################################
+# This part is for cf-runagent
+#
+# The most important parameter here is the list of hosts that the agent will 
+# poll for connections.
+###############################################################################
+
+body runagent control
+{
+# A list of hosts to contact when using cf-runagent
+
+ any::
+
+  hosts => { "127.0.0.1" };
+
+# , "myhost.example.com:5308", ...
+
+}
+
+###############################################################################
+# This part is for cf-monitord
+#
+# The system defaults will be sufficient for most users. 
+# This configurability potential, however, will be a key to developing 
+# the integrated monitoring capabilities of CFE.
+###############################################################################
+
+body monitor control
+{
+ any::
+  forgetrate => "0.7";
+  histograms => "true";
+#  tcpdump => "false";
+#  tcpdumpcommand => "/usr/sbin/tcpdump -t -n -v";
+
+}
+
+###############################################################################
+

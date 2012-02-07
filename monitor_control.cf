@@ -1,0 +1,36 @@
+# monitor.cf - monitor control promises
+# Meant for cfengine-community >= 3.2.1
+
+# Settings describing the details of the fixed behavioural promises made by 
+# cf-monitord. The system defaults will be sufficient for most users. This
+# configurability potential, however, will be a key to developing the
+# integrated monitoring capabilities of CFEngine.
+#body monitor control {
+#    # Decimal fraction [0,1] weighting of new values over old in 2d-average computation
+#    #forgetrate => "0.7";
+#
+#    # true/false use tcpdump if found
+#    #tcpdump => "true";
+#    #tcpdumpcommand => "/usr/sbin/tcpdump -i eth1";
+#}
+
+###############################################################################
+# This part is for cf-monitord
+#
+# The system defaults will be sufficient for most users. 
+# This configurability potential, however, will be a key to developing 
+# the integrated monitoring capabilities of CFE.
+###############################################################################
+
+body monitor control
+{
+ any::
+  forgetrate => "0.7";
+  histograms => "true";
+#  tcpdump => "false";
+#  tcpdumpcommand => "/usr/sbin/tcpdump -t -n -v";
+
+}
+
+###############################################################################
+

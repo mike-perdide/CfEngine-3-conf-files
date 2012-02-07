@@ -1,0 +1,54 @@
+# reporter.cf - reporter control promises
+
+# Determines a list of reports to write into the build directory. The format may
+# be in text, html or xml format. The reporter agent cf-report replaces both
+# cfshow and cfenvgraph. It no longer produces output to the console.
+#body reporter control {
+#    # true/false whether to auto-scale graph output to optimize use of space
+#    #auto_scaling => "true";
+#
+#    # The directory in which to generate output files
+#    build_directory => "/tmp/builddir";
+#
+#    # A list of reports that may be generated
+#    # Allowed : all audit performance all_locks active_locks hashes classes
+#    #           last_seen monitor_now monitor_history monitor_summary
+#    #           compliance setuid file_changes installed_software
+#    #           software_patches value variables
+#    reports => { "performance", "classes"  };
+#
+#    # Menu option for generated output format. Applies only to text reports,
+#    # graph data remain in xydy format.
+#    report_output => "html";
+#
+#    # Name of a style-sheet to be used in rendering html output (added to headers)
+#    #style_sheet => "http://www.example.org/css/sheet.css";
+#
+#    # A list of csv formatted files in the build directory to convert to simple xml
+#    #csv2xml => { "myreport.csv", "custom_report.csv"  };
+#
+#    # true/false whether to generate error bars on graph output
+#    #error_bars => "true";
+#}
+
+###############################################################################
+# This part is for cf-report
+#
+# Determines a list of reports to write into the build directory. 
+# The format may be in text, html or xml format.
+###############################################################################
+
+body reporter control
+{
+ any::
+
+  reports => { 
+             "all" 
+             };
+
+  build_directory => "$(sys.workdir)/reports";
+  report_output   => "html";
+  style_sheet => "/cf_enterprise.css";
+
+}
+
