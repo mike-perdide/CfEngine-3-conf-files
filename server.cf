@@ -1,3 +1,10 @@
+# server.cf - server control promises
+# Meant for cfengine-community >= 3.2.1
+
+# Settings describing the details of the fixed behavioural promises made by
+# cf-serverd. Server controls are mainly about determining access policy for
+# the connection protocol: i.e. access to the server itself. Access to specific
+# files must be granted in addition.
 body server control {
     # List of IPs or hostnames that may have more than one connection to the
     # server port
@@ -44,6 +51,6 @@ bundle server access_rules() {
             "$(def.dir_masterfiles)"
                 handle => "server_access_grant_access_policy",
                 comment => "Grant access to the policy updates",
-                admit   => { ".*$(def.domain)", @(def.allowed_hosts) };
+                admit   => { @(def.allowed_hosts) };
     roles:
 }
