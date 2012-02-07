@@ -55,21 +55,13 @@ bundle common def
 
   # Begin change # Your domain name, for use in access control
 
-     "domain"  string => "v0",
+     "domain"  string => "v1",
               comment => "Define a global domain for all hosts",
                handle => "common_def_vars_domain";
 
   # List here the IP masks that we grant access to on the server
 
-    "acl" slist => { 
-                   "$(sys.policy_hub)/16"  # Assume /16 LAN clients to start with
-
-                 #  "2001:700:700:3.*", 
-                 #  "217.77.34.18", 
-                 #  "217.77.34.19",
-                   },
-       comment => "Define an acl for the machines to be granted accesses",
-        handle => "common_def_vars_acl"; 
+    "acl" slist => { "192.168.0.116", "192.168.0.117", "cfhub", "cfhost1"};
 
   # End change #
 
