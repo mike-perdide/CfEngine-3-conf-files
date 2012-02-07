@@ -1,0 +1,8 @@
+body agent control {
+    any::
+        ifelapsed => "0";
+        skipidentify => "true";
+
+    debian::
+        environment => { "DEBIAN_FRONTEND=noninteractive", };
+}
