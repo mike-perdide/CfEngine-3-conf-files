@@ -11,14 +11,14 @@ body common control
 
     cfhub::
         bundlesequence => { "main_hub" };
-        inputs => { 
-            "cfengine_stdlib.cf", 
+        inputs => {
+            "cfengine_stdlib.cf",
            };
 
     cfhost1::
         bundlesequence => { "main_host" };
-        inputs => { 
-            "cfengine_stdlib.cf", 
+        inputs => {
+            "cfengine_stdlib.cf",
            };
 }
 
@@ -53,21 +53,9 @@ bundle common def
 {
  vars:
 
-  # Begin change # Your domain name, for use in access control
-
-     "domain"  string => "v1",
-              comment => "Define a global domain for all hosts",
-               handle => "common_def_vars_domain";
-
-  # List here the IP masks that we grant access to on the server
-
+    "domain"  string => "v2";
     "acl" slist => { "192.168.0.116", "192.168.0.117", "cfhub", "cfhost1"};
-
-  # End change #
-
-  "dir_masterfiles" string => translatepath("$(sys.workdir)/masterfiles"),
-                   comment => "Define masterfiles path",
-                    handle => "common_def_vars_dir_masterfiles";
+    "dir_masterfiles" string => translatepath("$(sys.workdir)/masterfiles");
 
 }
 
