@@ -6,13 +6,14 @@
 
 body common control
 {
- bundlesequence => { "main" };
+    bundlesequence => { "main" };
 
- inputs => { 
+    inputs => { 
             "cfengine_stdlib.cf", 
            };
 
- version => "Community Promises.cf 1.0.0";
+    version => "Community Promises.cf 1.0.0";
+    site_classes => { "cfhub", "cfhost1" };
 }
 
 ###############################################################################
