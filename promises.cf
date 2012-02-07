@@ -6,26 +6,36 @@
 
 body common control
 {
-    bundlesequence => { "main" };
+    version => "Community Promises.cf 1.0.0";
+    site_classes => { "cfhub", "cfhost1" };
 
-    inputs => { 
+    cfhub::
+        bundlesequence => { "main_hub" };
+        inputs => { 
             "cfengine_stdlib.cf", 
            };
 
-    version => "Community Promises.cf 1.0.0";
-    site_classes => { "cfhub", "cfhost1" };
+    cfhost1::
+        bundlesequence => { "main_host" };
+        inputs => { 
+            "cfengine_stdlib.cf", 
+           };
 }
 
 ###############################################################################
 
-bundle agent main
+bundle agent main_host
 {
  reports:
     cfhost1::
         "--> 2____________2 Agent $(def.domain)"
             comment => "Display message on screen/email",
             handle => "main_reports_cfe_running";
+}
 
+bundle agent main_hub
+{
+ reports:
     cfhub::
         "--> 2____________2 Server $(def.domain)"
             comment => "Display message on screen/email",
