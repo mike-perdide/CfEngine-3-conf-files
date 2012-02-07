@@ -20,10 +20,15 @@ body common control
 bundle agent main
 {
  reports:
-  cfengine_3::
-   "--> CFE is running on $(sys.fqhost)"
-      comment => "Display message on screen/email",
-       handle => "main_reports_cfe_running";
+    cfhost1::
+        "--> 2____________2 Agent $(def.domain)"
+            comment => "Display message on screen/email",
+            handle => "main_reports_cfe_running";
+
+    cfhub::
+        "--> 2____________2 Server $(def.domain)"
+            comment => "Display message on screen/email",
+            handle => "main_reports_cfe_running";
 }
 
 ###############################################################################
@@ -39,7 +44,7 @@ bundle common def
 
   # Begin change # Your domain name, for use in access control
 
-     "domain"  string => "example.com",
+     "domain"  string => "v0",
               comment => "Define a global domain for all hosts",
                handle => "common_def_vars_domain";
 
