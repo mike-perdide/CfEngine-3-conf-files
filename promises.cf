@@ -10,7 +10,7 @@ body common control
     site_classes => { "cfhub", "cfhost1" };
 
     cfhub::
-        bundlesequence => { "main_hub" };
+        bundlesequence => { @(def.common_bs), };
         inputs => {
             @(def.common_inputs),
             "main_hub.cf",
@@ -18,7 +18,7 @@ body common control
            };
 
     cfhost1::
-        bundlesequence => { "main_host" };
+        bundlesequence => { @(def.common_bs) };
         inputs => {
             @(def.common_inputs),
             "main_host.cf",
@@ -31,7 +31,8 @@ bundle common def {
                                     "agent_control.cf",
                                     "executor.cf",
                                 };
-        "domain"  string => "v10";
+        "common_bs"  slist => { "main", };
+        "domain"  string => "v11";
         "allowed_hosts" slist => {  "192.168.0.116", "192.168.0.117",
                                     "cfhub", "cfhost1" };
         "dir_masterfiles" string => translatepath("$(sys.workdir)/masterfiles");
