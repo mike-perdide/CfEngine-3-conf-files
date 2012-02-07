@@ -1,0 +1,20 @@
+body server control {
+ denybadclocks         => "false";
+ allowconnects         => { "127.0.0.1" , "::1", @(def.acl) };
+ allowallconnects      => { "127.0.0.1" , "::1", @(def.acl) };
+ trustkeysfrom         => { "127.0.0.1" , "::1", @(def.acl) };
+
+ skipverify            => { ".*$(def.domain)", "127.0.0.1" , "::1", @(def.acl) };
+
+ allowusers            => { "root" };
+}
+
+bundle server access_rules() {
+    access:
+        any::
+            "$(def.dir_masterfiles)"
+                handle => "server_access_grant_access_policy",
+                comment => "Grant access to the policy updates",
+                admit   => { ".*$(def.domain)", @(def.acl) };
+    roles:
+}

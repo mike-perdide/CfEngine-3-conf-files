@@ -14,6 +14,7 @@ body common control
         inputs => {
             "cfengine_stdlib.cf",
             "main_hub.cf",
+            "server.cf",
            };
 
     cfhost1::
@@ -35,7 +36,7 @@ bundle common def
 {
  vars:
 
-    "domain"  string => "v3";
+    "domain"  string => "v4";
     "acl" slist => { "192.168.0.116", "192.168.0.117", "cfhub", "cfhost1"};
     "dir_masterfiles" string => translatepath("$(sys.workdir)/masterfiles");
 
@@ -83,52 +84,6 @@ body agent control
 # Access to specific files must be granted in addition. 
 ###############################################################################
 
-body server control 
-{
- denybadclocks         => "false";
- allowconnects         => { "127.0.0.1" , "::1", @(def.acl) };
- allowallconnects      => { "127.0.0.1" , "::1", @(def.acl) };
- trustkeysfrom         => { "127.0.0.1" , "::1", @(def.acl) };
-
- skipverify            => { ".*$(def.domain)", "127.0.0.1" , "::1", @(def.acl) };
-
- allowusers            => { "root" };
-
-# Uncomment the line below to allow remote users to run 
-# cf-agent through cf-runagent
-
-# cfruncommand          => "$(sys.cf_agent)";
-}
-
-###############################################################################
-
-bundle server access_rules()
-{
- access:
-
-  any::
-
-   "$(def.dir_masterfiles)"
-       handle => "server_access_grant_access_policy",
-      comment => "Grant access to the policy updates",
-      admit   => { ".*$(def.domain)", @(def.acl) };
-
-# Uncomment the promise below to allow cf-runagent to
-# access cf-agent on Windows machines
-#	
-#  "c:\program files\cfengine\bin\cf-agent.exe"
-#
-#    handle => "grant_access_policy_agent",
-#    comment => "Grant access to the agent (for cf-runagent)",
-#    admit   => { ".*$(def.domain)", @(def.acl) };	
-	
- roles:
-
-# Use roles to allow specific remote cf-runagent users to
-# define certain soft-classes when running cf-agent on this host	
-#  "emergency"  authorize => { "root" };
-	
-}
 
 ###############################################################################
 # This part is for cf-execd
