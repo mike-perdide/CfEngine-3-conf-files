@@ -20,18 +20,9 @@ body common control
         bundlesequence => { "main_host" };
         inputs => {
             "cfengine_stdlib.cf",
+            "main_host.cf",
            };
 }
-
-bundle agent main_host
-{
- reports:
-    cfhost1::
-        "--> 2____________2 Agent $(def.domain)"
-            comment => "Display message on screen/email",
-            handle => "main_reports_cfe_running";
-}
-
 
 ###############################################################################
 #
