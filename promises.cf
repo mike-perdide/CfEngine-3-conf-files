@@ -25,109 +25,34 @@ body common control
            };
 }
 
-###############################################################################
-#
-# common def
-#  - common/global variables and classes here  
-#
-###############################################################################
+bundle common def {
+    vars:
 
-bundle common def
-{
- vars:
-
-    "common_inputs" slist => {  "cfengine_stdlib.cf",
-                                "agent_control.cf",
-                                "executor.cf",
-                            };
-    "domain"  string => "v6";
-    "acl" slist => { "192.168.0.116", "192.168.0.117", "cfhub", "cfhost1"};
-    "dir_masterfiles" string => translatepath("$(sys.workdir)/masterfiles");
+        "common_inputs" slist => {  "cfengine_stdlib.cf",
+                                    "agent_control.cf",
+                                    "executor.cf",
+                                };
+        "domain"  string => "v7";
+        "acl" slist => { "192.168.0.116", "192.168.0.117", "cfhub", "cfhost1"};
+        "dir_masterfiles" string => translatepath("$(sys.workdir)/masterfiles");
 
 }
 
-###############################################################################
-# This part is for cf-agent 
-#
-# Settings describing the details of the fixed behavioural promises made by 
-# cf-agent.
-###############################################################################
-
-
-###############################################################################
-# This part is for cf-serverd
-#
-# Server controls are mainly about determining access policy for the connection 
-# protocol: i.e. access to the server itself. 
-# Access to specific files must be granted in addition. 
-###############################################################################
-
-
-###############################################################################
-# This part is for cf-execd
-#
-# These body settings determine the behaviour of cf-execd, including scheduling
-# times and output capture to $(sys.workdir)/outputs and relay via email.
-###############################################################################
-
-
-###############################################################################
-# This part is for cf-report
-#
-# Determines a list of reports to write into the build directory. 
-# The format may be in text, html or xml format.
-###############################################################################
-
-body reporter control
-{
- any::
-
-  reports => { 
-             "all" 
-             };
-
-  build_directory => "$(sys.workdir)/reports";
-  report_output   => "html";
-  style_sheet => "/cf_enterprise.css";
-
+body reporter control {
+    any::
+        reports => { "all" };
+        build_directory => "$(sys.workdir)/reports";
+        report_output   => "html";
+        style_sheet => "/cf_enterprise.css";
 }
 
-###############################################################################
-# This part is for cf-runagent
-#
-# The most important parameter here is the list of hosts that the agent will 
-# poll for connections.
-###############################################################################
-
-body runagent control
-{
-# A list of hosts to contact when using cf-runagent
-
- any::
-
-  hosts => { "127.0.0.1" };
-
-# , "myhost.example.com:5308", ...
-
+body runagent control {
+    any::
+        hosts => { "127.0.0.1" };
 }
 
-###############################################################################
-# This part is for cf-monitord
-#
-# The system defaults will be sufficient for most users. 
-# This configurability potential, however, will be a key to developing 
-# the integrated monitoring capabilities of CFE.
-###############################################################################
-
-body monitor control
-{
- any::
-  forgetrate => "0.7";
-  histograms => "true";
-#  tcpdump => "false";
-#  tcpdumpcommand => "/usr/sbin/tcpdump -t -n -v";
-
+body monitor control {
+    any::
+        forgetrate => "0.7";
+        histograms => "true";
 }
-
-###############################################################################
-
