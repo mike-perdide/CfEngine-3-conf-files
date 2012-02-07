@@ -13,6 +13,7 @@ body common control
         bundlesequence => { "main_hub" };
         inputs => {
             "cfengine_stdlib.cf",
+            "main_hub.cf",
            };
 
     cfhost1::
@@ -21,8 +22,6 @@ body common control
             "cfengine_stdlib.cf",
            };
 }
-
-###############################################################################
 
 bundle agent main_host
 {
@@ -33,14 +32,6 @@ bundle agent main_host
             handle => "main_reports_cfe_running";
 }
 
-bundle agent main_hub
-{
- reports:
-    cfhub::
-        "--> 2____________2 Server $(def.domain)"
-            comment => "Display message on screen/email",
-            handle => "main_reports_cfe_running";
-}
 
 ###############################################################################
 #
@@ -53,7 +44,7 @@ bundle common def
 {
  vars:
 
-    "domain"  string => "v2";
+    "domain"  string => "v3";
     "acl" slist => { "192.168.0.116", "192.168.0.117", "cfhub", "cfhost1"};
     "dir_masterfiles" string => translatepath("$(sys.workdir)/masterfiles");
 
