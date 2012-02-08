@@ -28,13 +28,15 @@ body common control
 bundle common def {
     vars:
         "common_inputs" slist => {  "cfengine_stdlib.cf",
+                                    "utils.cf",
                                     "agent_control.cf",
                                     "executor_control.cf",
                                     "runagent_control.cf",
                                     "monitor_control.cf",
+                                    "update.cf",
                                  };
-        "common_bs"  slist => { "main", };
-        "domain"  string => "v15";
+        "common_bs"  slist => { "update", "main" };
+        "domain"  string => "v16";
         "allowed_hosts" slist => {  "192.168.0.116",
                                     "cfhub",
                                     "192.168.0.117",
