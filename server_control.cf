@@ -16,7 +16,7 @@ body server control {
     #allowconnects => { @(g.allowed_hosts) };
 
     # List of IPs from whom we accept public keys on trust
-    trustkeysfrom         => { @(def.allowed_hosts) };
+    #trustkeysfrom         => { @(def.allowed_hosts) };
     #trustkeysfrom => { @(g.allowed_hosts) };
 
     # List of usernames who may execute requests from this server

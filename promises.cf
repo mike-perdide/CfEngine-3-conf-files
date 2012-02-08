@@ -14,7 +14,7 @@ body common control
         inputs => {
             @(def.common_inputs),
             "main_hub.cf",
-            "server.cf",
+            "server_control.cf",
            };
 
     cfhost1::
@@ -29,12 +29,15 @@ bundle common def {
     vars:
         "common_inputs" slist => {  "cfengine_stdlib.cf",
                                     "agent_control.cf",
-                                    "executor.cf",
+                                    "executor_control.cf",
                                 };
         "common_bs"  slist => { "main", };
-        "domain"  string => "v12";
-        "allowed_hosts" slist => {  "192.168.0.116", "192.168.0.117",
-                                    "cfhub", "cfhost1" };
+        "domain"  string => "v13";
+        "allowed_hosts" slist => {  "192.168.0.116",
+                                    "cfhub",
+                                    "192.168.0.117",
+                                    "cfhost1"
+                                };
         "dir_masterfiles" string => translatepath("$(sys.workdir)/masterfiles");
 
 }
