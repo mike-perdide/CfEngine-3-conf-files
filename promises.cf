@@ -30,9 +30,10 @@ bundle common def {
         "common_inputs" slist => {  "cfengine_stdlib.cf",
                                     "agent_control.cf",
                                     "executor_control.cf",
-                                };
+                                    "runagent_control.cf",
+                                 };
         "common_bs"  slist => { "main", };
-        "domain"  string => "v13";
+        "domain"  string => "v14";
         "allowed_hosts" slist => {  "192.168.0.116",
                                     "cfhub",
                                     "192.168.0.117",
