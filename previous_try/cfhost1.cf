@@ -1,8 +1,0 @@
-# cfhost1.cf
-
-bundle agent cfhost1 {
-    files:
-    "/tmp/testfile"                      # promiser
-        comment => "This is for keeps...", # Live comment
-        create => "true";                 # Constraint 1
-}
