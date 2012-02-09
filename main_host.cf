@@ -6,7 +6,7 @@ bundle agent main {
                 handle => "main_reports_cfe_running";
 }
 
-bundle agent synchronization() {
+bundle agent synchronization {
     vars:
         "index" slist => getindices("def.sync_files_src");
     files:
@@ -14,4 +14,14 @@ bundle agent synchronization() {
             "$(index)"
                 comment => "Synchronization of $(index)",
                 copy_from => secure_cp("$(def.sync_files_src[$(index)])", "cfhub");
+}
+
+bundle agent package_installation {
+    vars:
+        "allpacks" slist => { "tcpdump", "tig", "git-core", };
+    packages:
+        "$(allpacks)"
+            package_policy => "add",
+            package_method => generic;
+
 }

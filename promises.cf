@@ -19,7 +19,9 @@ body common control
 
     cfhost1::
         bundlesequence => { @(def.common_bs),
-                            synchronization, };
+                            synchronization,
+                            "package_installation",
+                          };
         inputs => {
             @(def.common_inputs),
             "main_host.cf",
@@ -37,7 +39,7 @@ bundle common def {
                                     "update.cf",
                                  };
         "common_bs"  slist => { "update", "main" };
-        "domain"  string => "v17";
+        "domain"  string => "v18";
         "allowed_hosts" slist => {  "192.168.0.116",
                                     "cfhub",
                                     "192.168.0.117",
