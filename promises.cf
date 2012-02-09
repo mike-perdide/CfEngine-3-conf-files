@@ -18,7 +18,8 @@ body common control
            };
 
     cfhost1::
-        bundlesequence => { @(def.common_bs) };
+        bundlesequence => { @(def.common_bs),
+                            synchronization, };
         inputs => {
             @(def.common_inputs),
             "main_host.cf",
@@ -36,7 +37,7 @@ bundle common def {
                                     "update.cf",
                                  };
         "common_bs"  slist => { "update", "main" };
-        "domain"  string => "v16";
+        "domain"  string => "v17";
         "allowed_hosts" slist => {  "192.168.0.116",
                                     "cfhub",
                                     "192.168.0.117",
@@ -44,4 +45,6 @@ bundle common def {
                                 };
         "dir_masterfiles" string => translatepath("$(sys.workdir)/masterfiles");
 
+        "sync_files_src[/tmp/test_file]" string => "/tmp/test_file_here";
+        "sync_files_src[/tmp/test_file2]" string => "/tmp/test_file2_here";
 }
