@@ -47,7 +47,7 @@ body server control {
 
 bundle server access_rules() {
     vars:
-        "index" slist => getindices("def.sync_files_src");
+        "index" slist => getindices("host_params.sync_files_src");
     access:
         cfhub::
             # This means these promises are only defined for cfhub (which acts
@@ -56,7 +56,7 @@ bundle server access_rules() {
                 handle => "server_access_grant_access_policy",
                 comment => "Grant access to the policy updates",
                 admit   => { @(def.allowed_hosts) };
-            "$(def.sync_files_src[$(index)])"
+            "$(host_params.sync_files_src[$(index)])"
                 handle => "server_access_grant_access_files",
                 comment => "Grant access to the files",
                 admit   => { @(def.allowed_hosts) };

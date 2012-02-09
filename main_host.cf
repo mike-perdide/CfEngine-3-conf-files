@@ -8,20 +8,24 @@ bundle agent main {
 
 bundle agent synchronization {
     vars:
-        "index" slist => getindices("def.sync_files_src");
+        "index" slist => getindices("host_params.sync_files_src");
     files:
         cfhost1::
             "$(index)"
                 comment => "Synchronization of $(index)",
-                copy_from => secure_cp("$(def.sync_files_src[$(index)])", "cfhub");
+                copy_from => secure_cp("$(host_params.sync_files_src[$(index)])", "cfhub");
 }
 
 bundle agent package_installation {
     vars:
-        "allpacks" slist => { "tcpdump", "tig", "git-core", };
+        "add_packs" slist => { @(host_params.add_packs), };
+        "remove_packs" slist => { @(host_params.remove_packs), };
     packages:
-        "$(allpacks)"
-            package_policy => "add",
+        "$(remove_packs)"
+            package_policy => "delete",
             package_method => generic;
 
+        "$(add_packs)"
+            package_policy => "add",
+            package_method => generic;
 }
