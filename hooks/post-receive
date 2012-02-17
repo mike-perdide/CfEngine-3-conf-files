@@ -1,0 +1,18 @@
+#!/usr/bash -e
+CHECK_DIR=/tmp/cf_check_promises
+CFENGINE_DIR=/var/cfengine
+
+while read old new name
+do
+    if [ ! -d $CHECK_DIR ]
+    then
+        mkdir $CHECK_DIR
+        git archive $new|tar -x -C $CHECK_DIR
+    fi
+
+    rm -rf $CFENGINE_DIR/masterfiles
+    cp -r $CHECK_DIR/masterfiles $CFENGINE_DIR
+    rm -rf $CFENGINE_DIR/deployfiles
+    cp -r $CHECK_DIR/masterfiles $CFENGINE_DIR
+
+done
