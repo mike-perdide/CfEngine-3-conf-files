@@ -16,7 +16,6 @@ do
 
     if [ -d $CHECK_DIR/masterfiles ] && [ -f $CHECK_DIR/masterfiles/promises.cf ]
     then
-        echo "here"
         /usr/local/sbin/cf-promises -f $CHECK_DIR/masterfiles/promises.cf
     fi
 done
