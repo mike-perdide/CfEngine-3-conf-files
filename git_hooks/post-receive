@@ -10,9 +10,9 @@ do
         git archive $new|tar -x -C $CHECK_DIR
     fi
 
-    rm -rf $CFENGINE_DIR/masterfiles
-    cp -r $CHECK_DIR/masterfiles $CFENGINE_DIR
-    rm -rf $CFENGINE_DIR/deployfiles
-    cp -r $CHECK_DIR/deployfiles $CFENGINE_DIR
+    rm -rf $CFENGINE_DIR/masterfiles/*
+    cp -r $CHECK_DIR/masterfiles/* $CFENGINE_DIR/masterfiles/
+    rm -rf $CFENGINE_DIR/deployfiles/*
+    cp -r $CHECK_DIR/deployfiles/* $CFENGINE_DIR/deployfiles/
 
 done
