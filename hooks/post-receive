@@ -13,6 +13,6 @@ do
     rm -rf $CFENGINE_DIR/masterfiles
     cp -r $CHECK_DIR/masterfiles $CFENGINE_DIR
     rm -rf $CFENGINE_DIR/deployfiles
-    cp -r $CHECK_DIR/masterfiles $CFENGINE_DIR
+    cp -r $CHECK_DIR/deployfiles $CFENGINE_DIR
 
 done
