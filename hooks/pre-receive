@@ -1,0 +1,20 @@
+#!/bin/bash -e
+CHECK_DIR=/tmp/cf_check_promises
+
+while read old new name
+do
+    echo "Running cf-promises for $new"
+
+    if [ ! -d $CHECK_DIR ]
+    then
+        mkdir $CHECK_DIR
+    fi
+
+    git archive $new|tar -x -C $CHECK_DIR
+
+    if [ -d $CHECK_DIR/masterfiles ] && [ -f $CHECK_DIR/masterfiles/promises.cf ]
+    then
+        echo "here"
+        /usr/local/sbin/cf-promises -f $CHECK_DIR/masterfiles/promises.cf
+    fi
+done
