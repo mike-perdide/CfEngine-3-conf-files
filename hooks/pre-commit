@@ -1,0 +1,22 @@
+#!/bin/bash
+
+function is_git_root() {
+    if [ -d .git ]
+    then
+        echo yes
+    else
+        echo no
+    fi
+}
+
+function find_git_root() {
+    while [[ $(is_git_root) == no ]]
+    do
+        cd ..
+    done
+    
+    echo $(pwd)
+}
+
+GIT_ROOT=$(find_git_root)
+/usr/sbin/cf-promises -f $(GIT_ROOT)
