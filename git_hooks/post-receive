@@ -1,4 +1,4 @@
-#!/usr/bash -e
+#!/bin/bash -e
 CHECK_DIR=/tmp/cf_check_promises
 CFENGINE_DIR=/var/cfengine
 
