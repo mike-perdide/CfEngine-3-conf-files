@@ -1,6 +1,7 @@
 #!/bin/bash -e
 CHECK_DIR=/tmp/cf_check_promises
 CFENGINE_DIR=/var/cfengine
+PRE_RECEIVE_EMAIL=/var/lib/gitolite/repositories/cfe3-files.git/hooks/post-receive-email
 
 while read old new name
 do
@@ -15,4 +16,8 @@ do
     rm -rf $CFENGINE_DIR/deployfiles/*
     cp -r $CHECK_DIR/deployfiles/* $CFENGINE_DIR/deployfiles/
 
+    if [ -f $PRE_RECEIVE_EMAIL ]
+    then
+        echo $old $new $name | $PRE_RECEIVE_EMAIL
+    fi
 done
