@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 USAGE="""SYNOPSIS: 
-    cfpromises_check.py PROMISE_FILE
+    cfpromises_check.py PROMISES_FILE
 DESCRIPTION
     This script aims at detecting syntax errors in the cfengine files by
     running cf-promises while defining some classes for each run.
