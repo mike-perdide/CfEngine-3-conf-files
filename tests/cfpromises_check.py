@@ -5,7 +5,7 @@ DESCRIPTION
     This script aims at detecting syntax errors in the cfengine files by
     running cf-promises while defining some classes for each run.
 
-    The promise file should either contain a common ("any::") bundlesequence in
+    The promises file should either contain a common ("any::") bundlesequence in
     the common control body or a list of test classes in the following form:
         # TEST_CLASSES:
         # class1
