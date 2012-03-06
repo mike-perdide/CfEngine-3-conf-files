@@ -120,11 +120,11 @@ def setup_network(conn, machines_to_clone):
 
 
 if __name__ == "__main__":
-#    if not len(argv) == 2:
-#        print USAGE
-#        sys.exit(1)
+    if not len(sys.argv) == 2:
+        print USAGE
+        sys.exit(1)
 
-    conn, machines_to_clone, cfg = parse_cfg("config.cfg")
+    conn, machines_to_clone, cfg = parse_cfg(sys.argv[1])
 
     # Clone the machines
     for machine in machines_to_clone:

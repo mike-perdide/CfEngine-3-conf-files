@@ -54,11 +54,11 @@ def remove_all_disks(conn, storage_paths, disks_to_remove):
 
 
 if __name__ == "__main__":
-    if not len(argv) == 2:
+    if not len(sys.argv) == 2:
         print USAGE
         sys.exit(1)
 
-    conn, machines_to_clone, cfg = parse_cfg("config.cfg")
+    conn, machines_to_clone, cfg = parse_cfg(sys.argv[1])
     storage_paths = [(name, pool_storage_path_from_name(conn, name))
                      for name in conn.listStoragePools()]
 
