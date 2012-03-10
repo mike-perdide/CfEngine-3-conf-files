@@ -5,7 +5,7 @@
 # License: http://www.gnu.org/licenses/gpl-3.0.txt
 
 USAGE="""SYNOPSIS: 
-    cfpromises_check.py PROMISES_FILE
+    cfpromises_customcheck.py PROMISES_FILE
 DESCRIPTION
     This script aims at detecting syntax errors in the cfengine files by
     running cf-promises while defining some classes for each run.
