@@ -1,4 +1,9 @@
 #!/usr/bin/env python
+# Copyright (C) 2010 Julien Miotte <miotte.julien@gmail.com>
+#
+# This script is released under the GPLv3.
+# License: http://www.gnu.org/licenses/gpl-3.0.txt
+
 USAGE="""SYNOPSIS: 
     cfpromises_check.py PROMISES_FILE
 DESCRIPTION
