@@ -5,19 +5,23 @@
 # cf-serverd. Server controls are mainly about determining access policy for
 # the connection protocol: i.e. access to the server itself. Access to specific
 # files must be granted in addition.
+bundle server server_def {
+    vars:
+        "allowed_hosts" slist => {  "192.168.0.101", "client",
+                                    "192.168.0.100", "hub",
+                                 };
+}
+
 body server control {
     # List of IPs or hostnames that may have more than one connection to the
     # server port
-    allowallconnects      => { @(def.allowed_hosts) };
-    #allowallconnects => { @(g.allowed_hosts) };
+    allowallconnects      => { @(server_def.allowed_hosts) };
 
     # List of IPs or hostnames that may connect to the server port
-    allowconnects         => { @(def.allowed_hosts) };
-    #allowconnects => { @(g.allowed_hosts) };
+    allowconnects         => { @(server_def.allowed_hosts) };
 
     # List of IPs from whom we accept public keys on trust
-    #trustkeysfrom         => { @(def.allowed_hosts) };
-    #trustkeysfrom => { @(g.allowed_hosts) };
+    trustkeysfrom         => { @(server_def.allowed_hosts) };
 
     # List of usernames who may execute requests from this server
     allowusers            => { "root" };
@@ -29,13 +33,12 @@ body server control {
     denybadclocks => "false";
 
     # List of IPs or hostnames for which we expect no DNS binding and cannot verify
-    skipverify            => { @(def.allowed_hosts) };
-    #skipverify => { @(g.allowed_hosts) };
+    skipverify            => { @(server_def.allowed_hosts) };
 
     # IP of the interface to which the server should bind on multi-homed hosts
     #bindtointerface => "192.168.1.1";
 
-    # Default port for cfengine server
+    # default port for cfengine server
     #port => "5308"
 
     # List of IPs or hostnames that may NOT connect to the server port
@@ -47,18 +50,15 @@ body server control {
 
 bundle server access_rules() {
     vars:
-        "index" slist => getindices("host_params.sync_files_src");
+        "common_deployed_files" slist => { @(deploy_files_def.common_deployed_files) };
     access:
-        cfhub::
-            # This means these promises are only defined for cfhub (which acts
-            # as the file server here)
-            "$(def.dir_masterfiles)"
-                handle => "server_access_grant_access_policy",
-                comment => "Grant access to the policy updates",
-                admit   => { @(def.allowed_hosts) };
-            "$(host_params.sync_files_src[$(index)])"
-                handle => "server_access_grant_access_files",
-                comment => "Grant access to the files",
-                admit   => { @(def.allowed_hosts) };
-    roles:
+        "$(def.dir_masterfiles)"
+            handle => "server_access_grant_access_policy",
+            comment => "Grant access to the policy updates",
+            admit   => { @(server_def.allowed_hosts) };
+
+	    "$(def.dir_common_deployed_files)$(common_deployed_files)"
+            handle => "server_access_grant_deployed_files",
+            comment => "Grant access to the deployed files",
+            admit   => { @(server_def.allowed_hosts) };
 }

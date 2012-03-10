@@ -6,7 +6,7 @@
 body agent control {
 #    any::
     # This should normally be set to an interval like 1-5 mins
-    ifelapsed => "0";
+    ifelapsed => "5";
 
     # Do not send IP/name during server connection if address resolution is
     # broken.

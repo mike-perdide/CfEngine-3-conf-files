@@ -1,0 +1,30 @@
+bundle common deploy_files_def {
+    # This must be common because it will be read by deploy_files and by access_rules().
+    vars:
+	    # Common files that will be deployed. For usage, see common.cf, deploy_files
+	    # Below, setting the src. In common.cf, using $(dir_common_deployed_files) to set the dst.
+	    "common_deployed_files" slist => { "/root/.screenrc", "/root/.vimrc", "/root/.bashrc",
+                                           "/etc/ssmtp/ssmtp.conf", };
+
+        # These disclaimers are to be included on top of the deployed files.
+        "diese_disclaimer" string => "# DON'T MODIFY THIS SCRIPT! IT WILL BE REWRITTEN
+# ----------> USE THE GIT REPOSITORY <----------";
+        "dquotes_disclaimer" string => "\" DON'T MODIFY THIS SCRIPT! IT WILL BE REWRITTEN
+\" ----------> USE THE GIT REPOSITORY <----------";
+
+}
+
+bundle agent deploy_files {
+    vars:
+        "common_deployed_files" slist => { @(deploy_files_def.common_deployed_files) };
+    files:
+        "$(common_deployed_files).staging"
+            comment => "Fetching $(common_deployed_files)",
+            copy_from => secure_cp("$(def.dir_common_deployed_files)$(common_deployed_files)", "$(def.fileserver)");
+
+        "$(common_deployed_files)"
+            comment => "Expanding $(common_deployed_files)",
+            create => "true",
+            edit_defaults => empty,
+            edit_line => expand_template("$(common_deployed_files).staging");
+}

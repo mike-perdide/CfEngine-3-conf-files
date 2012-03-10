@@ -1,0 +1,10 @@
+${deploy_files_def.diese_disclaimer}
+shell -${SHELL}
+caption always "%{= Kw} [%0c] %-Lw%{= KW}[%50>%n%f* %t]%{= Kw}%+Lw%=| %l | ${FULLHOST}"
+defscrollback 1024
+startup_message off
+hardstatus on
+hardstatus alwayslastline
+hardstatus string '%{= Ck}%H:%L>%{= dd} %h'
+vbell off
+logfile ".screenlog.%n"

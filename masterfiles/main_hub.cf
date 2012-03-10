@@ -1,7 +1,0 @@
-bundle agent main {
-    reports:
-        cfhub::
-            "--> 2____________2 Server $(def.domain)"
-                comment => "Display message on screen/email",
-                handle => "main_reports_cfe_running";
-}

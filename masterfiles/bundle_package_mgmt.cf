@@ -1,0 +1,15 @@
+bundle agent package_mgmt {
+    vars:
+	    # Common packages to install/remove
+        "add_packs" slist => {  "vim", "most", "tcpdump", "screen", "ssmtp", "heirloom-mailx" };
+        "remove_packs" slist => { "exim4", "exim4-base", "exim4-config", "bsd-mailx", };
+
+    packages:
+        "$(remove_packs)"
+            package_policy => "delete",
+            package_method => generic;
+
+        "$(add_packs)"
+            package_policy => "add",
+            package_method => generic;
+}

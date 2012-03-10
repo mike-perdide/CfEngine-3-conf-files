@@ -4,58 +4,49 @@
 #
 ###############################################################################
 
-body common control
-{
+body common control {
     version => "Community Promises.cf 1.0.0";
-    site_classes => { "cfhub", "cfhost1" };
+    site_classes => { "cfserver_vm",
+		              "cacti_vm" };
 
-    cfhub::
-        bundlesequence => { @(def.common_bs), };
-        inputs => {
-            @(def.common_inputs),
-            "main_hub.cf",
-            "server_control.cf",
-           };
+   cfserver_vm::
+        bundlesequence => { @(def.bundlesequence), };
+        inputs => { @(def.common_inputs),
+                    "control_server.cf",
+                  };
 
-    cfhost1::
-        bundlesequence => { @(def.common_bs),
-                            synchronization,
-                            "package_installation",
-                          };
-        inputs => {
-            @(def.common_inputs),
-            "main_host.cf",
-           };
+    cacti_vm::
+        bundlesequence => { @(def.bundlesequence), };
+        inputs => { @(def.common_inputs), };
 }
 
 bundle common def {
     vars:
-        "common_inputs" slist => {  "cfengine_stdlib.cf",
-                                    "utils.cf",
-                                    "agent_control.cf",
-                                    "executor_control.cf",
-                                    "runagent_control.cf",
-                                    "monitor_control.cf",
-                                    "update.cf",
-                                 };
-        "common_bs"  slist => { "update", "main" };
-        "domain"  string => "v19";
-        "allowed_hosts" slist => {  "192.168.0.116",
-                                    "cfhub",
-                                    "192.168.0.117",
-                                    "cfhost1"
-                                };
+        # Defining the common bundlesequences and inputs
+        # Convention: each significant bundlesequence must have its own file.
+        "bundlesequence"  slist => { "update",
+                                     "deploy_files",
+                                     "package_mgmt",
+                                   };
+        "bundles_inputs" slist => { "bundle_update.cf",
+                                    "bundle_deploy_files.cf",
+                                    "bundle_package_mgmt.cf",
+                                  };
+
+        # Below, the rest of the inputs definitions.
+        "control_inputs" slist => { "control_agent.cf",
+                                    "control_executor.cf",
+                                    "control_runagent.cf",
+                                    "control_monitor.cf", };
+        "libraries_inputs" slist => { "cfengine_stdlib.cf", "utils.cf", };
+        "common_inputs" slist => { @(control_inputs),
+                                   @(libraries_inputs),
+                                   @(bundles_inputs), };
+
+        # Some paths definitions
         "dir_masterfiles" string => translatepath("$(sys.workdir)/masterfiles");
-}
+	    "dir_common_deployed_files" string => translatepath("$(sys.workdir)/deployfiles/common");
 
-bundle common host_params {
-    vars:
-        # Package management
-        "add_packs" slist => {  "tcpdump", "tig", "git-core",
-                                "heirloom-mailx", "ssmtp", };
-        "remove_packs" slist => { "exim4", "bsd-mailx", };
-
-        # File synchronization
-        "sync_files_src[/tmp/test_file]" string => "/tmp/test_file_here";
-        "sync_files_src[/tmp/test_file2]" string => "/tmp/test_file2_here";
+        # Host definition
+        "fileserver" string => "192.168.0.100";
 }
