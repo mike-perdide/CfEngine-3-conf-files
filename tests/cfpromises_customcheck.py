@@ -36,7 +36,7 @@ def classes_from_file(filepath):
         offset = lines.index("# TEST_CLASSES:\n")
         end = lines.index("# END\n")
     except ValueError, e:
-        print "Couldn't find TEST_CLASSES correct declaration."
+        print "Warning: Couldn't find TEST_CLASSES correct declaration."
         return [""]
 
     if (offset + 1) == end:
@@ -44,6 +44,7 @@ def classes_from_file(filepath):
 
     all_test_classes = []
     offset += 1
+
     while offset < end:
         line = lines[offset]
         line = line.strip()
@@ -86,6 +87,7 @@ if __name__ == "__main__":
     fails = 0
     all_test_classes = classes_from_file(filepath)
     for defined, negated in all_test_classes:
+        print "Testing class:", defined
         rtcode, out, err = run_cfpromises(filepath, defined, negated)
 
         if rtcode != 0:
