@@ -48,6 +48,12 @@ def classes_from_file(filepath):
     while offset < end:
         line = lines[offset]
         line = line.strip()
+
+        if not ("# ") in line:
+            print "Error: the following line is malformed."
+            print line
+            return
+
         line = line.split("# ")[1]
 
         if " -" in line:
