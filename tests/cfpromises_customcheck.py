@@ -14,13 +14,13 @@ DESCRIPTION
     the common control body or a list of test classes in the following form:
         # TEST_CLASSES:
         # class1
-        # class2,class3
+        # class2,class3 -class5,class6
         # class4
         # END
 
     When running the above example, the following commands will be run:
         cf-promises --define class1 -f promises.cf
-        cf-promises --define class2,class3 -f promises.cf
+        cf-promises --define class2,class3 --negate class5,class6 -f promises.cf
         cf-promises --define class4 -f promises.cf
 """
 
@@ -49,18 +49,26 @@ def classes_from_file(filepath):
         line = line.strip()
         line = line.split("# ")[1]
 
-        all_test_classes.append(line)
+        if " -" in line:
+            all_test_classes.append(line.split(" -"))
+        else:
+            all_test_classes.append([line, ""])
+
         offset += 1
 
     return all_test_classes
 
 
-def run_cfpromises(filepath, test_classes=""):
+def run_cfpromises(filepath, defined="", negated=""):
     command = ["/var/cfengine/bin/cf-promises", "-f", filepath]
 
-    if test_classes:
-        command.append("-D")
-        command.append(test_classes)
+    if defined:
+        command.append("--define")
+        command.append(defined)
+
+    if negated:
+        command.append("--negate")
+        command.append(negated)
 
     handle = Popen(command, stdout=PIPE, stderr=PIPE)
     out, err = handle.communicate()
@@ -77,8 +85,8 @@ if __name__ == "__main__":
 
     fails = 0
     all_test_classes = classes_from_file(filepath)
-    for test_classes in all_test_classes:
-        rtcode, out, err = run_cfpromises(filepath, test_classes)
+    for defined, negated in all_test_classes:
+        rtcode, out, err = run_cfpromises(filepath, defined, negated)
 
         if rtcode != 0:
             fails += 1
